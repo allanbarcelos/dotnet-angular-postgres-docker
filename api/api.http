@@ -1,0 +1,12 @@
+@host = http://localhost/api
+
+POST {{host}}/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "admin@example.com",
+    "password": "Admin@123"
+}
+
+###

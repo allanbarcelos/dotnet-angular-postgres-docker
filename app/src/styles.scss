@@ -1,0 +1,25 @@
+/* You can add global styles to this file, and also import other style files */
+// Import Custom Variables
+@import "./../src/scss/variables";
+
+@import './../node_modules/bootstrap/scss/bootstrap.scss';
+@import './../node_modules/bootstrap-icons/font/bootstrap-icons.scss';
+
+// Import Custom SCSS
+// @import "global.scss";
+
+// Layout
+// @import "./../src/scss/layout/authentication";
+@import "./../src/scss/layout/dashboard-default";
+@import "./../src/scss/layout/dashboard-fixed";
+@import "./../src/scss/layout/error";
+
+// Navigation
+@import "./../src/scss/navigation/nav";
+@import "./../src/scss/navigation/topnav";
+@import "./../src/scss/navigation/sidenav/sidenav";
+@import "./../src/scss/navigation/sidenav/sidenav-dark";
+@import "./../src/scss/navigation/sidenav/sidenav-light";
+
+// Plugins
+// @import "./../src/scss/plugins/simple-datatables.scss";
