@@ -1,4 +1,4 @@
-using API.Data; // Substitua pelo namespace correto do seu DbContext
+using API.Data;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
 

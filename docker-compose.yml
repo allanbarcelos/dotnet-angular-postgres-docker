@@ -9,9 +9,9 @@ services:
         restart: true
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
-      - Jwt__Key=${JWT_KEY}
-      - Jwt__Issuer=${JWT_ISSUER}
-      - Jwt__Audience=${JWT_AUDIENCE}
+      - Jwt__Key=${JWT__KEY}
+      - Jwt__Issuer=${JWT__ISSUER}
+      - Jwt__Audience=${JWT__AUDIENCE}
       - CONNECTION_STRING=${CONNECTION_STRING}
     networks:
       - internal_network

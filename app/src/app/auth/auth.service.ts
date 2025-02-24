@@ -12,7 +12,7 @@ export class AuthService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient) {
     this.token = localStorage.getItem('token');
     this.isAuthenticatedSubject.next(!!this.token);
   }
@@ -31,11 +31,10 @@ export class AuthService {
     this.token = null;
     localStorage.removeItem('token');
     this.isAuthenticatedSubject.next(false);
-    this.router.navigate(['/login']);
   }
 
   isLoggedIn(): boolean {
-    return !this.isAuthenticatedSubject.value;
+    return this.isAuthenticatedSubject.value;
   }
 
   getToken(): string | null {

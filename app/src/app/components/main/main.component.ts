@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { FooterComponent } from '../footer/footer.component';
 import {
   NgbAccordionModule,
   NgbModule,
+  NgbScrollSpy,
   NgbScrollSpyModule,
   NgbToastModule,
 } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
+import { AuthService } from '../../auth/auth.service';
 
 const _chats = [
   {
@@ -94,24 +96,37 @@ const _chats = [
     NgbScrollSpyModule,
     NgbToastModule,
     FormsModule,
-    TruncatePipe
+    TruncatePipe,
   ],
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, AfterViewInit {
+  @ViewChild(NgbScrollSpy) scrollSpy!: NgbScrollSpy;
+
   show = true;
   model: any;
-  chats: Array<{ id: string; name: string; lastMessage: string; unread: number }> = [];
+  chats: Array<{
+    id: string;
+    name: string;
+    lastMessage: string;
+    unread: number;
+  }> = [];
 
   formatter = (x: { name: string }) => x.name;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authSrv: AuthService) {}
 
   ngOnInit(): void {
     this.chats = _chats;
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.scrollSpy.active = 'last';
+    }, 0);
+  }
+
   logout() {
-    localStorage.removeItem('token');
+    this.authSrv.logout();
     this.router.navigate(['/auth/login']);
   }
 }

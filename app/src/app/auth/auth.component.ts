@@ -12,7 +12,6 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     document.body.classList.add('bg-primary');
-
     if (this.authSrv.isLoggedIn()) {
       this.router.navigate(['/']);
     }
