@@ -17,10 +17,10 @@ export class AuthService {
     this.isAuthenticatedSubject.next(!!this.token);
   }
 
-  login(email: string, password: string): Observable<{ Token: string }> {
-    return this.http.post<{ Token: string }>('/auth/login', { email, password }).pipe(
+  login(email: string, password: string): Observable<{ token: string }> {
+    return this.http.post<{ token: string }>('/auth/login', { email, password }).pipe(
       tap(response => {
-        this.token = response.Token;
+        this.token = response.token;
         localStorage.setItem('token', this.token);
         this.isAuthenticatedSubject.next(true);
       })

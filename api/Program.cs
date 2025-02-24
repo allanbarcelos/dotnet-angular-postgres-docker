@@ -7,12 +7,13 @@ using System.Text;
 using API.Data;
 using API.Data.Seeders;
 
+using API.Services;
+using API.WebSockets;
+using API.Utils;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add PostgreSQL Database Context
-// builder.Services.AddDbContext<AppDbContext>(options =>
-//     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(Environment.GetEnvironmentVariable("CONNECTION_STRING")));
 
@@ -75,6 +76,12 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+// Chat Service
+builder.Services.AddScoped<ChatService>();
+
+// Websocket
+builder.Services.AddScoped<WebSocketHandler>();
+
 var app = builder.Build();
 
 // Run migrations at startup
@@ -97,6 +104,38 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// App Websocket Middleware
+app.UseWebSockets();
+
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/ws" && context.WebSockets.IsWebSocketRequest)
+    {
+        var token = context.Request.Query["token"];
+        var jwtValidator = new JwtValidator(builder.Configuration);
+        var principal = jwtValidator.ValidateToken(token);
+
+        if (principal == null)
+        {
+            context.Response.StatusCode = 401;
+            return;
+        }
+
+        using var scope = app.Services.CreateScope();
+        var chatService = scope.ServiceProvider.GetRequiredService<ChatService>();
+        var webSocketHandler = scope.ServiceProvider.GetRequiredService<WebSocketHandler>();
+
+        var webSocket = await context.WebSockets.AcceptWebSocketAsync();
+        await webSocketHandler.HandleWebSocketAsync(webSocket, principal);
+    }
+    else
+    {
+        await next();
+    }
+});
+
+
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

@@ -14,8 +14,8 @@
             <i class="bi bi-person-fill fs-5"></i>
         </button>
         <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="dropdown-menu dropdown-menu-end me-1">
-            <button ngbDropdownItem>Profile</button>
-            <button ngbDropdownItem>logout</button>
+            <a ngbDropdownItem [routerLink]="['/profile']">Profile</a>
+            <button ngbDropdownItem (click)="logout()">logout</button>
         </div>
     </div>
 </nav>
@@ -109,6 +109,57 @@
                 <router-outlet />
             </div>
         </main>
+
+
+
+
         <app-footer></app-footer>
+
+
+        <ngb-toast [autohide]="false" (hidden)="show = false">
+            <ng-template ngbToastHeader>
+                <div class="me-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                        <path
+                            d="M16.896 10l-4.896-8-4.896 8-7.104-4 3 11v5h18v-5l3-11-7.104 4zm-11.896 10v-2h14v2h-14zm14.2-4h-14.4l-1.612-5.909 4.615 2.598 4.197-6.857 4.197 6.857 4.615-2.598-1.612 5.909z"
+                        />
+                    </svg>
+                    <strong class="mx-1">Fancy</strong>header here
+                </div>
+            </ng-template>
+            Hello, I am toast. Have you noticed my header has been generated from a Template?
+        </ngb-toast>
+
+        
+        <div ngbAccordion class="position-absolute bottom-0 end-0 col-2">
+            <div ngbAccordionItem [collapsed]="false">
+                <h2 ngbAccordionHeader>
+                    <button ngbAccordionButton class="d-flex gap-2">
+                        <span class="badge bg-primary rounded-pill float-end">14</span>
+                        Chat
+                    </button>
+                </h2>
+
+                <div ngbAccordionCollapse>
+                    <input id="typeahead-template" type="text" class="form-control col rounded-0"
+                    placeholder="Search ..." />
+                    <div ngbAccordionBody ngbScrollSpy #spy="ngbScrollSpy" style="height: 400px" class="p-0">
+                        <ol class="list-group">
+                            <ng-template ngFor let-chat [ngForOf]="chats">
+                                <li *ngIf="chat" class="list-group-item d-flex justify-content-between align-items-start rounded-0">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold">{{chat.name}}</div>
+                                        <small class="text-muted">{{chat.lastMessage | truncate: 15 }}</small>
+                                    </div>
+                                    <span *ngIf="chat?.unread"
+                                        class="badge bg-primary rounded-pill">{{chat.unread}}</span>
+                                </li>
+                            </ng-template>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
